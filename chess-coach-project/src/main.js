@@ -3,6 +3,7 @@ import { Chess } from './chessLib.js';
 import { root, rootT, DEPTH, NOISE, wp } from './engine.js';
 import { GL, drawBoard } from './board.js';
 import { askClaude } from './claude.js';
+import { sfInit, sfRoot, SF_LEVELS } from './stockfish.js';
 
 const $=s=>document.querySelector(s);
 let game=new Chess(),me='w',lvl=2,flip=false,sel=null,hint=null,busy=false,mode='P',rv=null,ri=0,saved=false,token=0,coachHist=[],pm='free',pend=null;
@@ -26,13 +27,20 @@ function fin(){
  try{const a=JSON.parse(localStorage.getItem('cc_games')||'[]');
   a.unshift({pgn:game.pgn(),res,lvl,me,d:new Date().toLocaleDateString()});
   localStorage.setItem('cc_games',JSON.stringify(a.slice(0,20)));}catch(e){}}
+async function pickMove(g){
+ if(lvl>=5){try{const r=await sfRoot(g,SF_LEVELS[lvl]);if(r.m)return r;}catch(e){showSF('Stockfish problem ('+e.message+'). Using the built-in engine for this move.');}}
+ return lvl>=4?rootT(g,3500):root(g,DEPTH[Math.min(lvl,3)-1],NOISE[Math.min(lvl,3)-1]);}
+function showSF(t){const el=$('#sfs');el.hidden=!t;el.textContent=t||'';}
+function preloadSF(){showSF('Loading Stockfish…');sfInit().then(()=>showSF('Stockfish ready.')).catch(e=>showSF('Stockfish could not load ('+e.message+'). The built-in engine will be used instead.'));}
 function engine(){
  if(game.game_over()){fin();sync();return;}
  busy=true;sync();
- const gm=game;setTimeout(()=>{const t0=Date.now(),r=lvl===4?rootT(gm,3500):root(gm,DEPTH[lvl-1],NOISE[lvl-1]),wait=Math.max(0,800+Math.random()*1400-(Date.now()-t0));setTimeout(()=>{if(gm!==game)return;if(r.m)game.move(r.m);
-  busy=false;hint=null;sync();if(game.game_over())fin();},wait);},60);}
+ const gm=game;
+ setTimeout(async()=>{
+  const t0=Date.now(),r=await pickMove(gm),wait=Math.max(0,800+Math.random()*1400-(Date.now()-t0));
+  setTimeout(()=>{if(gm!==game)return;if(r.m)game.move(r.m);busy=false;hint=null;sync();if(game.game_over())fin();},wait);},60);}
 function newGame(){
- token++;game=new Chess();me=$('#selC').value;lvl=+$('#selL').value;flip=me==='b';
+ token++;game=new Chess();me=$('#selC').value;lvl=+$('#selL').value;lvl>=5?preloadSF():showSF('');flip=me==='b';
  sel=hint=null;saved=false;rv=null;busy=false;coachHist=[];pend=null;$('#nt').hidden=true;pm=$('#selM').value;setMode('P');sync();if(me==='b')engine();}
 $('#board').addEventListener('click',e=>{
  const el=e.target.closest('.sq');if(!el||mode==='R'||busy||game.game_over()||game.turn()!==me)return;
@@ -149,7 +157,7 @@ const pw=s=>Math.abs(s)>20000?(s>0?'forced mate for the side to move':'forced ma
 function ascii(g){return g.board().map((r,i)=>(8-i)+' '+r.map(p=>p?(p.color==='w'?p.type.toUpperCase():p.type):'.').join(' ')).join('\n')+'\n  a b c d e f g h';}
 function facts(){
  const g=game,h=g.history(),side=t=>t==='w'?'White':'Black';
- let s=`Student plays ${side(me)}; engine level ${lvl} of 4. ${side(g.turn())} to move.\nMoves: ${h.join(' ')||'(none yet)'}\nBoard (uppercase White, lowercase Black):\n${ascii(g)}\nLegal moves now: ${g.moves().join(' ')||'none (game over)'}\n`;
+ let s=`Student plays ${side(me)}; engine level ${lvl}. ${side(g.turn())} to move.\nMoves: ${h.join(' ')||'(none yet)'}\nBoard (uppercase White, lowercase Black):\n${ascii(g)}\nLegal moves now: ${g.moves().join(' ')||'none (game over)'}\n`;
  if(g.in_check())s+='The side to move is in check.\n';
  const r=root(new Chess(g.fen()),2,0);
  if(r.m)s+=`Engine pick for ${side(g.turn())}: ${r.m.san}, score ${pw(r.s)} pawns for the side to move.\n`;

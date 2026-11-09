@@ -15,8 +15,9 @@
   <div id="vP">
    <div class="row">
     <select id="selC" aria-label="Your colour"><option value="w">Play White</option><option value="b">Play Black</option></select>
-    <select id="selL" aria-label="Level"><option value="1">Level 1 · Beginner</option><option value="2" selected>Level 2 · Casual</option><option value="3">Level 3 · Club</option><option value="4">Level 4 · Strongest here</option></select>
+    <select id="selL" aria-label="Level"><option value="1">Level 1 · Beginner</option><option value="2" selected>Level 2 · Casual</option><option value="3">Level 3 · Club</option><option value="4">Level 4 · Strongest built-in</option><option value="5">Stockfish · about 1500</option><option value="6">Stockfish · about 2200</option><option value="7">Stockfish · full strength</option></select>
    </div>
+   <p class="mute" id="sfs" hidden style="margin:0 0 10px"></p>
    <div class="row"><select id="selM" aria-label="Mode"><option value="free">Free play</option><option value="tutor">Tutor (pauses on big mistakes)</option><option value="live">Live coach (comments only)</option></select><select id="selT" aria-label="Alert threshold"><option value="8">Flag drops of 8%+</option><option value="12" selected>Flag drops of 12%+</option><option value="20">Flag drops of 20%+</option></select></div>
    <div class="row"><button class="b p" id="bNew">New game</button><button class="b" id="bUndo">Undo</button><button class="b" id="bHint">Hint</button><button class="b" id="bFlip">Flip</button></div>
    <div id="nt" class="box" hidden></div>

@@ -44,3 +44,11 @@ To build the files for hosting: `npm run build` (output goes in `dist/`).
 ## Licensing note
 
 Stockfish is licensed under the GPL. If you publish an app that includes it, your own code generally needs to be open source too. Check this before releasing or selling the app.
+
+## Stockfish (Phase 3)
+
+- `npm install` downloads the `stockfish` package and a script (`scripts/copy-stockfish.mjs`) copies the single-threaded lite engine into `public/stockfish/`. That folder is generated, so it is not committed.
+- `src/stockfish.js` talks to the engine over the UCI protocol in a Web Worker.
+- The level menu now has three Stockfish options: about 1500, about 2200 and full strength. Ratings are approximate.
+- If Stockfish cannot load, the app says so and uses the built-in engine.
+- Review, tutor mode and win-chance numbers still use the built-in engine. Switching them to Stockfish is the next phase.
