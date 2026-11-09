@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Chess Coach</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;700&display=swap">
+</head>
+<body>
+<main class="app">
+ <section><p id="st"></p><div id="board" role="grid" aria-label="Chess board"></div></section>
+ <aside class="side">
+  <h1>Chess Coach</h1>
+  <nav class="tabs"><button id="tP" aria-selected="true">Play</button><button id="tR" aria-selected="false">Review</button><button id="tC" aria-selected="false">Coach</button></nav>
+  <div id="vP">
+   <div class="row">
+    <select id="selC" aria-label="Your colour"><option value="w">Play White</option><option value="b">Play Black</option></select>
+    <select id="selL" aria-label="Level"><option value="1">Level 1 · Beginner</option><option value="2" selected>Level 2 · Casual</option><option value="3">Level 3 · Club</option><option value="4">Level 4 · Strongest built-in</option><option value="5">Stockfish · about 1500</option><option value="6">Stockfish · about 2200</option><option value="7">Stockfish · full strength</option></select>
+   </div>
+   <p class="mute" id="sfs" hidden style="margin:0 0 10px"></p>
+   <div class="row"><select id="selM" aria-label="Mode"><option value="free">Free play</option><option value="tutor">Tutor (pauses on big mistakes)</option><option value="live">Live coach (comments only)</option></select><select id="selT" aria-label="Alert threshold"><option value="8">Flag drops of 8%+</option><option value="12" selected>Flag drops of 12%+</option><option value="20">Flag drops of 20%+</option></select></div>
+   <div class="row"><button class="b p" id="bNew">New game</button><button class="b" id="bUndo">Undo</button><button class="b" id="bHint">Hint</button><button class="b" id="bFlip">Flip</button></div>
+   <div id="nt" class="box" hidden></div>
+   <div id="ml" class="mvs"></div>
+  </div>
+  <div id="vR" hidden></div>
+  <div id="vC" hidden><p class="mute">Ask about the position, a plan, or your last move. The coach sees the board, the legal moves and the engine’s analysis.</p><div class="row" id="cq"><button class="b" data-q="Explain this position in plain language: who is better and why?">Explain position</button><button class="b" data-q="What should my plan be from here? Give ideas, not just a move.">My plan</button><button class="b" data-q="Are any of my pieces in danger or hanging right now? Is the opponent threatening anything?">Any danger?</button><button class="b" data-q="Was my last move good? If not, what went wrong and what was better?">Check last move</button></div><div id="cl" class="box" style="min-height:90px;max-height:320px;overflow:auto"></div><div class="row"><input id="ci" placeholder="Ask the coach…" aria-label="Ask the coach"><button class="b p" id="cs">Ask</button></div></div>
+ </aside>
+</main>
+<div id="pp" hidden role="dialog" aria-modal="true" aria-label="Choose promotion piece"><div class="pbox"><p>Promote pawn to</p><div id="pr"></div></div></div>
+<script type="module" src="/src/main.js"></script>
+</body>
+</html>
