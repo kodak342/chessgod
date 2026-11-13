@@ -4,6 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Chess Coach</title>
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="theme-color" content="#2b6f5a">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Chess Coach">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<link rel="icon" href="/icons/icon-192.png">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;700&display=swap">
 </head>
 <body>
@@ -29,5 +36,6 @@
 </main>
 <div id="pp" hidden role="dialog" aria-modal="true" aria-label="Choose promotion piece"><div class="pbox"><p>Promote pawn to</p><div id="pr"></div></div></div>
 <script type="module" src="/src/main.js"></script>
+<script>if('serviceWorker' in navigator&&location.hostname!=='localhost'&&location.hostname!=='127.0.0.1'){addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));}</script>
 </body>
 </html>
